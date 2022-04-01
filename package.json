@@ -4,7 +4,8 @@
   "description": "A mini scraping tool using node, express and cheerio",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -20,5 +21,10 @@
   "bugs": {
     "url": "https://github.com/ahamedzoha/scrapify/issues"
   },
-  "homepage": "https://github.com/ahamedzoha/scrapify#readme"
+  "homepage": "https://github.com/ahamedzoha/scrapify#readme",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "cheerio": "^1.0.0-rc.10",
+    "express": "^4.17.3"
+  }
 }
