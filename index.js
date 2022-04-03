@@ -22,8 +22,18 @@ axios
     $(".abhead", html).each(function () {
       $(this).text()
 
-      const companyName = $(this).text().split(" ")[0].trim()
-      const currentPrice = $(this).text().split(" ")[0].trim()
+      const companyName = $(this)
+        .text()
+        .split(" ")[0]
+        .trim()
+        .slice(0, -5)
+        .trim()
+      const currentPrice = $(this)
+        .text()
+        .split(" ")[0]
+        .trim()
+        .slice(companyName.length + 1)
+        .trim()
       const change = $(this).text().trim()
 
       stockData.push({
