@@ -17,29 +17,28 @@ axios
 
     const $ = cheerio.load(html)
 
-    const linksArray = []
-
     $(".abhead", html).each(function () {
       $(this).text()
 
       const companyName = $(this)
         .text()
+        .replace(/\t/g, "")
         .split(" ")[0]
         .trim()
-        .slice(0, -5)
-        .trim()
-      const currentPrice = $(this)
+        .match(/\d?[a-zA-Z]|\([^)]*\)/g)
+        .join("")
+
+      const priceData = $(this)
         .text()
-        .split(" ")[0]
-        .trim()
-        .slice(companyName.length + 1)
-        .trim()
-      const change = $(this).text().trim()
+        .match(/[+/-]?[0-9]+\.[0-9]+/g)
 
       stockData.push({
         name: companyName,
-        currentPrice: currentPrice,
-        change: change,
+        prices: {
+          current: priceData[0],
+          changed: priceData[1],
+          changePercent: `${priceData[2]}%`,
+        },
       })
       console.log(stockData)
     })
