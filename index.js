@@ -49,10 +49,7 @@ const getStockData = () => {
     })
 }
 
-app.get("/", (req, res) => {
-  getStockData()
-  res.json(stockData)
-})
+app.use("/api/stocks", require("./routes/stockRoutes"))
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`)
