@@ -1,10 +1,12 @@
 const express = require("express")
 const router = express.Router()
 
-router.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Welcome to the Stock API",
-  })
-})
+const {
+  getAllStockTickers,
+  getSpecificStockTicker,
+} = require("../controllers/stockController")
+
+router.get("/", getAllStockTickers)
+router.get("/:id", getSpecificStockTicker)
 
 module.exports = router
