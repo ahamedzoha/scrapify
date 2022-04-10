@@ -2,13 +2,12 @@ const axios = require("axios")
 const cheerio = require("cheerio")
 
 const URL = `https://www.dsebd.org/`
+const stockData = []
 
 // @author - Azaz
 // @desc  Get all stock tickers
 // @route GET /api/stocks
 const getAllStockTickers = async (req, res) => {
-  const stockData = []
-
   await axios
     .get(URL)
     .then((response) => {
