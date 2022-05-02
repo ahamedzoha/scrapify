@@ -4,10 +4,7 @@ const cheerio = require("cheerio")
 const URL = `https://www.dsebd.org/`
 const stockData = []
 
-// @author - Azaz
-// @desc  Get all stock tickers
-// @route GET /api/stocks
-const getAllStockTickers = async (req, res) => {
+exports.getAllStockTickers = async () => {
   await axios
     .get(URL)
     .then((response) => {
@@ -37,30 +34,13 @@ const getAllStockTickers = async (req, res) => {
             changed: priceData[1],
             changePercent: `${priceData[2]}%`,
           },
+          raw: $(this).text(),
         })
       })
-      //   console.log(stockData)
+      console.log(stockData)
+      console.log(`Successfully scraped ${stockData.length} stocks`)
     })
     .catch((error) => {
       console.log(error)
     })
-
-  res.status(200).json(stockData)
-}
-
-// @author - Azaz
-// @desc  Get specific stock ticker based on ID (STOCK NAME)
-// @route GET /api/stocks
-const getSpecificStockTicker = (req, res) => {
-  //   res.status(200).json({
-  //     message: `Welcome to the Stock API ${req.params.id}`,
-  //   })
-  console.log(req.params.id)
-  console.log(req.body)
-  res.status(200).json({ message: `${req.body}` })
-}
-
-module.exports = {
-  getAllStockTickers,
-  getSpecificStockTicker,
 }
