@@ -13,7 +13,6 @@
   },
   "main": "index.js",
   "dependencies": {
-    "@google-cloud/firestore": "^5.0.2",
     "axios": "^0.27.2",
     "cheerio": "^1.0.0-rc.10",
     "firebase-admin": "^10.0.2",
