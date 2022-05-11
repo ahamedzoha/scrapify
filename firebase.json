@@ -13,10 +13,10 @@
       "port": 9099
     },
     "firestore": {
-      "port": 8080
+      "port": 8081
     },
     "pubsub": {
-      "port": 8085
+      "port": 8086
     }
   }
 }
