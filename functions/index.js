@@ -8,9 +8,10 @@ admin.initializeApp()
 const URL = `https://www.dsebd.org/`
 let stockData = []
 
-// Scheduled function that runs every 2 minutes to scrape DSE data
+// Scheduled function that runs every 2nd minute past every hour
+// from 10 through 15 on every day-of-week from Sunday through Thursday.
 exports.getAllStockTickers = functions.pubsub
-  .schedule("*/2  *  *  *  *")
+  .schedule("*/2 10-15 * * 0-4")
   .onRun(async (message) => {
     stockData = []
     await axios
