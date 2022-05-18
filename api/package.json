@@ -24,7 +24,8 @@
   "homepage": "https://github.com/ahamedzoha/scrapify#readme",
   "dependencies": {
     "axios": "^0.26.1",
-    "cheerio": "^1.0.0-rc.10",
-    "express": "^4.17.3"
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "firebase": "^9.8.1"
   }
 }
