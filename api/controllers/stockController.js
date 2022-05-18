@@ -26,7 +26,7 @@ const getAllStockTickers = async (req, res) => {
   const Stocks = await getDocs(q)
   Stocks.forEach((doc) => {
     console.log(`${doc.id} => ${doc.data()}`)
-    stockTickers.data.push(doc.data().data)
+    stockTickers.data.push(...doc.data().data)
     stockTickers.timestamp = doc.data().timestamp.toDate()
   })
 
@@ -37,9 +37,11 @@ const getAllStockTickers = async (req, res) => {
 // @desc  Get specific stock ticker based on ID (STOCK NAME)
 // @route GET /api/stocks
 const getSpecificStockTicker = async (req, res) => {
-  let stockTicker = { data: [], timestamp: null }
+  let stockTicker = { searched: "", data: [], timestamp: null }
 
   const q = query(stocksRef, where("data", "array-contains", req.params.id))
+
+  stockTicker.searched = req.params.id
 
   const Stocks = await getDocs(q)
   Stocks.forEach((doc) => {
