@@ -91,6 +91,84 @@ const getSpecificStockTicker = async (req, res) => {
         .first()
         .text()
 
+      const range_through_day = $(
+        "#company > tbody > tr:nth-child(2) > td:nth-child(4)",
+        window
+      )
+        .first()
+        .text()
+
+      const change_taka = $(
+        "#company > tbody > tr:nth-child(3) > td:nth-child(2)",
+        window
+      )
+        .first()
+        .text()
+
+      const change_percentage = $(
+        "#company > tbody > tr:nth-child(4) > td:nth-child(1)",
+        window
+      )
+        .first()
+        .text()
+        .trim()
+
+      const days_value = $(
+        "#company > tbody > tr:nth-child(3) > td:nth-child(4)",
+        window
+      )
+        .first()
+        .text()
+
+      const year_moving_range = $(
+        "#company > tbody > tr:nth-child(4) > td:nth-child(3)",
+        window
+      )
+        .first()
+        .text()
+
+      const opening_price = $(
+        "#company > tbody > tr:nth-child(5) > td:nth-child(2)",
+        window
+      )
+        .first()
+        .text()
+
+      const adjusted_opening_price = $(
+        "#company > tbody > tr:nth-child(6) > td:nth-child(2)",
+        window
+      )
+        .first()
+        .text()
+
+      const yesterdays_closing_price = $(
+        "#company > tbody > tr:nth-child(7) > td:nth-child(2)",
+        window
+      )
+        .first()
+        .text()
+
+      const days_vol_nos = $(
+        "#company > tbody > tr:nth-child(5) > td:nth-child(4)",
+        window
+      )
+        .first()
+        .text()
+
+      const days_trade_nos = $(
+        "#company > tbody > tr:nth-child(6) > td:nth-child(4)",
+        window
+      )
+        .first()
+        .text()
+
+      const market_cap = $(
+        "#company > tbody > tr:nth-child(7) > td:nth-child(4)",
+        window
+      )
+        .first()
+        .text()
+
       let basicInfo = {
         companyName: companyName,
         trading_code: trading_code,
@@ -99,9 +177,22 @@ const getSpecificStockTicker = async (req, res) => {
 
       let market_info = {
         market_info_date: market_info_date,
+        opening_price: opening_price,
+        adjusted_opening_price: adjusted_opening_price,
+        yesterdays_closing_price: yesterdays_closing_price,
         last_trading_price: last_trading_price,
         last_closing_price: last_closing_price,
         last_update_time: last_update_time,
+        range_through_day: range_through_day,
+        days_value_mn: days_value,
+        year_moving_range: year_moving_range,
+        days_trade_nos: days_trade_nos,
+        days_vol_nos: days_vol_nos,
+        market_cap: market_cap,
+        changes: {
+          change_taka: change_taka,
+          change_percentage: change_percentage,
+        },
       }
 
       let full_info = {
