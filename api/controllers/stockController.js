@@ -1,4 +1,6 @@
 const axios = require("axios")
+const tabletojson = require("tabletojson").Tabletojson
+const cheerio = require("cheerio")
 const { initializeApp } = require("firebase/app")
 const {
   getFirestore,
@@ -37,25 +39,82 @@ const getAllStockTickers = async (req, res) => {
 // @desc  Get specific stock ticker based on ID (STOCK NAME)
 // @route GET /api/stocks
 const getSpecificStockTicker = async (req, res) => {
-  let stockTicker = { searched: "", data: [], timestamp: null }
+  // let stockTicker = { searched: "", data: [], timestamp: null }
 
-  const q = query(stocksRef, where("data", "array-contains", req.params.id))
+  const URL = `https://www.dsebd.org/displayCompany.php?name=${req.params.id}`
+  await axios
+    .get(URL)
+    .then(async (resp) => {
+      const html = resp.data
+      const $ = cheerio.load(html, {
+        ignoreWhitespace: true,
+        normalizeWhitespace: true,
+      })
 
-  stockTicker.searched = req.params.id
+      const window = $(".row", html).html()
 
-  const Stocks = await getDocs(q)
-  Stocks.forEach((doc) => {
-    console.log(`${doc.id} => ${doc.data()}`)
-    stockTicker.data.push(doc.data().data)
-    stockTicker.timestamp = doc.data().timestamp.toDate()
-  })
+      const companyName = $("h2>i", window).first().text()
 
-  // res.status(200).send({
-  //   sent: {
-  //     reqID: req.params.id,
-  //   },
-  // })
-  res.status(200).send(stockTicker)
+      const trading_code = $("#company > tbody > tr > th:nth-child(1)", window)
+        .first()
+        .text()
+        .split(" ")[2]
+
+      const scrip_code = $("#company > tbody > tr > th:nth-child(2)", window)
+        .first()
+        .text()
+        .split(" ")[2]
+
+      const market_info_date = $(
+        "#section-to-print > h2:nth-child(5) > i",
+        window
+      ).text()
+
+      const last_trading_price = $(
+        "#company > tbody > tr:nth-child(1) > td:nth-child(2)",
+        window
+      )
+        .first()
+        .text()
+
+      const last_closing_price = $(
+        "#company > tbody > tr:nth-child(1) > td:nth-child(4)",
+        window
+      )
+        .first()
+        .text()
+
+      const last_update_time = $(
+        "#company > tbody > tr:nth-child(2) > td:nth-child(2)",
+        window
+      )
+        .first()
+        .text()
+
+      let basicInfo = {
+        companyName: companyName,
+        trading_code: trading_code,
+        scrip_code: scrip_code,
+      }
+
+      let market_info = {
+        market_info_date: market_info_date,
+        last_trading_price: last_trading_price,
+        last_closing_price: last_closing_price,
+        last_update_time: last_update_time,
+      }
+
+      let full_info = {
+        basic_info: basicInfo,
+        market_info: market_info,
+      }
+
+      res.status(200).json(full_info)
+    })
+    .catch((error) => {
+      console.log(error)
+      res.end()
+    })
 }
 
 module.exports = {
