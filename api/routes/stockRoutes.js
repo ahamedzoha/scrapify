@@ -6,11 +6,6 @@ const {
   getSpecificStockTicker,
 } = require("../controllers/stockController")
 
-// router.use((req, res, next) => {
-//   console.log(`${req.method} ${req.originalUrl}`)
-//   next()
-// })
-
 router.get("/", getAllStockTickers)
 router.get("/:id", cache(500), getSpecificStockTicker)
 
