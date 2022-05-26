@@ -1,12 +1,17 @@
 const express = require("express")
 const router = express.Router()
-
+const cache = require("../routeCache")
 const {
   getAllStockTickers,
   getSpecificStockTicker,
 } = require("../controllers/stockController")
 
+// router.use((req, res, next) => {
+//   console.log(`${req.method} ${req.originalUrl}`)
+//   next()
+// })
+
 router.get("/", getAllStockTickers)
-router.get("/:id", getSpecificStockTicker)
+router.get("/:id", cache(500), getSpecificStockTicker)
 
 module.exports = router

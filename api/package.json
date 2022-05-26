@@ -29,6 +29,6 @@
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "firebase": "^9.8.1",
-    "tabletojson": "^2.0.7"
+    "node-cache": "^5.1.2"
   }
 }

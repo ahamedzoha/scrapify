@@ -1,5 +1,4 @@
 const axios = require("axios")
-const tabletojson = require("tabletojson").Tabletojson
 const cheerio = require("cheerio")
 const { initializeApp } = require("firebase/app")
 const {
@@ -104,6 +103,7 @@ const getSpecificStockTicker = async (req, res) => {
       )
         .first()
         .text()
+        .trim()
 
       const change_percentage = $(
         "#company > tbody > tr:nth-child(4) > td:nth-child(1)",
@@ -200,7 +200,7 @@ const getSpecificStockTicker = async (req, res) => {
         market_info: market_info,
       }
 
-      res.status(200).json(full_info)
+      res.status(200).send(full_info)
     })
     .catch((error) => {
       console.log(error)
