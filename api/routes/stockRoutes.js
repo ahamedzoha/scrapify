@@ -6,7 +6,7 @@ const {
   getCompanyDetails,
 } = require("../controllers/stock")
 
-router.get("/", getAllStockTickers)
-router.get("/:id", cache(500), getCompanyDetails)
+router.route("/").get(getAllStockTickers)
+router.route("/:id").get(cache(500), getCompanyDetails)
 
 module.exports = router
