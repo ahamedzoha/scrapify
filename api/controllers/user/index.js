@@ -1,4 +1,10 @@
-const { getUser, createUser, getAllUsers, updateUser } = require("./user")
+const {
+  getUser,
+  createUser,
+  getAllUsers,
+  updateUser,
+  deleteUser,
+} = require("./user")
 
 module.exports = {
   getAllUsers,
@@ -6,4 +12,5 @@ module.exports = {
   createUser,
   getAllUsers,
   updateUser,
+  deleteUser,
 }
