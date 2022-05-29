@@ -24,7 +24,7 @@ const getAllStockTickers = async (req, res) => {
 
   const Stocks = await getDocs(q)
   Stocks.forEach((doc) => {
-    console.log(`${doc.id} => ${doc.data()}`)
+    // console.log(`${doc.id} => ${doc.data()}`)
     stockTickers.data.push(...doc.data().data)
     stockTickers.timestamp = doc.data().timestamp.toDate()
   })

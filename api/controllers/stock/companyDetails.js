@@ -174,6 +174,47 @@ const getCompanyDetails = async (req, res) => {
     })
 }
 
+const checkID = async (req, res, next, val) => {
+  const URL = `https://www.dsebd.org/`
+  let IDs = []
+  await axios
+    .get(URL)
+    .then(async (resp) => {
+      const html = resp.data
+
+      const $ = cheerio.load(html)
+
+      $(".abhead", html).each(function () {
+        $(this).text()
+
+        const companyName = $(this)
+          .text()
+          .replace(/\t/g, "")
+          .split(" ")[0]
+          .trim()
+          .match(/\d?[a-zA-Z]|\([^)]*\)/g)
+          .join("")
+
+        IDs.push(companyName)
+      })
+
+      console.log(IDs)
+    })
+    .catch((error) => {
+      console.log(error)
+      res.end()
+    })
+
+  if (!IDs.includes(val)) {
+    return res.status(400).json({
+      error: "Invalid ID",
+    })
+  } else {
+    next()
+  }
+}
+
 module.exports = {
   getCompanyDetails,
+  checkID,
 }

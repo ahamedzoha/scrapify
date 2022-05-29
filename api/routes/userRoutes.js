@@ -9,7 +9,12 @@ const {
   deleteUser,
 } = require("../controllers/user")
 
-router.route("/").get(cache(500), getAllUsers).post(createUser)
+const { createUserVerify } = require("../controllers/user/middlewares/index")
+
+router
+  .route("/")
+  .get(cache(500), getAllUsers)
+  .post(createUserVerify, createUser)
 
 router
   .route("/:id")
