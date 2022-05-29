@@ -3,10 +3,10 @@ const router = express.Router()
 const cache = require("../routeCache")
 const {
   getAllStockTickers,
-  getSpecificStockTicker,
-} = require("../controllers/stockController")
+  getCompanyDetails,
+} = require("../controllers/stock")
 
 router.get("/", getAllStockTickers)
-router.get("/:id", cache(500), getSpecificStockTicker)
+router.get("/:id", cache(500), getCompanyDetails)
 
 module.exports = router
