@@ -15,8 +15,8 @@ app.use((req, res, next) => {
   next()
 })
 
-// TODO: deprecate endpoint without V1
-app.use("/api/stocks", require("./routes/stockRoutes"))
+// // TODO: deprecate endpoint without V1
+// app.use("/api/stocks", require("./routes/stockRoutes"))
 
 // V1 URLs
 app.use("/api/v1/stocks", require("./routes/stockRoutes"))
