@@ -8,7 +8,7 @@ const {
   limit,
   where,
 } = require("firebase/firestore")
-const firebaseConfig = require("../../config")
+// const firebaseConfig = require("../../config")
 
 const apiKey = process.env.FIREBASE_APIKEY
 const authDomain = process.env.FIREBASE_AUTHDOMAIN
