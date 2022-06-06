@@ -6,19 +6,21 @@ on:
 jobs:
   build:
     name: GAE Deploy
+
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: api
+
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - id: "auth"
         uses: "google-github-actions/auth@v0"
         with:
           credentials_json: ${{ secrets.GCP_SECRETS }}
-          working_directory: api
+          deliverables: ./api/app.yaml
 
       - id: "deploy"
+        name: "Deploy to GAE"
         uses: "google-github-actions/deploy-appengine@v0"
 
       # Example of using the output
