@@ -12,7 +12,15 @@ jobs:
         shell: bash
         working-directory: api
     steps:
-      - uses: actions/checkout@v2
-      - uses: google-github-actions/deploy-appengine@main
+      - id: "auth"
+        uses: "google-github-actions/auth@v0"
         with:
-          credentials: ${{ secrets.GCP_SECRETS }}
+          workload_identity_provider: "projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider"
+          service_account: ${{ secrets.GCP_SECRETS }}
+
+      - id: "deploy"
+        uses: "google-github-actions/deploy-appengine@v0"
+
+      # Example of using the output
+      - id: "test"
+        run: 'curl "${{ steps.deploy.outputs.url }}"'
