@@ -1,6 +1,6 @@
 const app = require("./app")
-const dotenv = require("dotenv")
-dotenv.config({ path: "./config.env" })
+
+require("dotenv").config()
 
 const PORT = process.env.PORT || 8006
 app.listen(PORT, () => {
