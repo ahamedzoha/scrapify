@@ -24,7 +24,7 @@ jobs:
           working_directory: ./api
           deliverables: "./app.yaml"
           promote: true
-          version: "CI"
+          version: "github-ci"
 
       # Example of using the output
       - id: "test"
