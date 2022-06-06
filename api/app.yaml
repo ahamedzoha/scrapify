@@ -1,14 +1,2 @@
 runtime: nodejs16
-
-env_variables:
-  MY_VAR: "my value"
-  MONGO_USERNAME: "admin"
-  MONGO_USER_PASS: "iuQV4IALB1nMIUuC"
-  MONGO_CONNECT_STRING: "mongodb+srv://admin:<PASSWORD>@cluster0.v6ol3s1.mongodb.net/?retryWrites=true&w=majority"
-  FIREBASE_APIKEY: "AIzaSyAUPkUaAt6KSbsC9459QmHGD7dUyYPI3Q4"
-  FIREBASE_AUTHDOMAIN: "scrapise.firebaseapp.com"
-  FIREBASE_PROJECTID: "scrapise"
-  FIREBASE_STORAGEBUCKET: "scrapise.appspot.com"
-  FIREBASE_MESSAGESENDERID: "974853542341"
-  FIREBASE_APPID: "1=974853542341= web:ee6e02e5377e12509a3bac"
-  FIREBASE_MEASUREMENTID: "G-2ML202KDYG"
+# env_variables:
