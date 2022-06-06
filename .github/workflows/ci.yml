@@ -22,7 +22,7 @@ jobs:
         uses: "google-github-actions/deploy-appengine@v0"
         with:
           working_directory: ./api
-          deliverables: "./api/app.yaml"
+          deliverables: "./app.yaml"
           promote: true
 
       # Example of using the output
