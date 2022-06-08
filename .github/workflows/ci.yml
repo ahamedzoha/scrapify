@@ -13,6 +13,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: GCP app engine yaml compiler
+        uses: gokiwibot/gcp-yaml-compiler@v1.0
+        with:
+          file: ./api/app.yaml
+        env:
+          MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
+          MONGO_USER_PASS: ${{ secrets.MONGO_USER_PASS }}
+          MONGO_CONNECT_STRING: ${{ secrets.MONGO_CONNECT_STRING }}
+          FIREBASE_APIKEY: ${{ secrets.FIREBASE_APIKEY }}
+          FIREBASE_AUTHDOMAIN: ${{ secrets.FIREBASE_AUTHDOMAIN }}
+          FIREBASE_PROJECTID: ${{ secrets.FIREBASE_PROJECTID }}
+          FIREBASE_STORAGEBUCKET: ${{ secrets.FIREBASE_STORAGEBUCKET }}
+          FIREBASE_MESSAGESENDERID: ${{ secrets.FIREBASE_MESSAGESENDERID }}
+          FIREBASE_APPID: ${{ secrets.FIREBASE_APPID }}
+          FIREBASE_MEASUREMENTID: ${{ secrets.FIREBASE_MEASUREMENTID }}
+
       - id: "auth"
         uses: "google-github-actions/auth@v0"
         with:
