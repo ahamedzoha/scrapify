@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const cache = require("../routeCache")
+const { checkCompany } = require("./middlewares/stock_routes_middlewares")
 const {
   getAllStockTickers,
   getCompanyDetails,
