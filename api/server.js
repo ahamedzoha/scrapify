@@ -1,6 +1,23 @@
 require("dotenv").config()
-
+const mongoose = require("mongoose")
 const app = require("./app")
+
+const DB = process.env.MONGO_CONNECT_STRING.replace(
+  "<PASSWORD>",
+  process.env.MONGO_DB_PASSWORD
+)
+
+mongoose
+  .connect(DB, {
+    useNewUrlParser: true,
+  })
+  .then((con) => {
+    console.log("Connected to MongoDB")
+    console.log(con)
+  })
+  .catch((err) => {
+    console.log(err)
+  })
 
 const PORT = process.env.PORT || 8006
 app.listen(PORT, () => {

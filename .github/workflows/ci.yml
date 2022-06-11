@@ -18,9 +18,8 @@ jobs:
         with:
           file: ./api/app.yaml
         env:
-          MONGO_USERNAME: ${{ secrets.MONGO_USERNAME }}
-          MONGO_USER_PASS: ${{ secrets.MONGO_USER_PASS }}
           MONGO_CONNECT_STRING: ${{ secrets.MONGO_CONNECT_STRING }}
+          MONGO_DB_PASSWORD: ${{secrets.MONGO_DB_PASSWORD}}
           FIREBASE_APIKEY: ${{ secrets.FIREBASE_APIKEY }}
           FIREBASE_AUTHDOMAIN: ${{ secrets.FIREBASE_AUTHDOMAIN }}
           FIREBASE_PROJECTID: ${{ secrets.FIREBASE_PROJECTID }}
