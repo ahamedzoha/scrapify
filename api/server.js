@@ -10,10 +10,10 @@ const DB = process.env.MONGO_CONNECT_STRING.replace(
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
+    dbName: "stock-exchange",
   })
-  .then((con) => {
+  .then(() => {
     console.log("Connected to MongoDB")
-    console.log(con)
   })
   .catch((err) => {
     console.log(err)

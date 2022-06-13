@@ -1,6 +1,5 @@
 const express = require("express")
 const router = express.Router()
-const cache = require("../routeCache")
 const {
   getAllUsers,
   getUser,
@@ -9,17 +8,8 @@ const {
   deleteUser,
 } = require("../controllers/user")
 
-const { createUserVerify } = require("../controllers/user/middlewares/index")
+router.route("/").get(getAllUsers).post(createUser)
 
-router
-  .route("/")
-  .get(cache(500), getAllUsers)
-  .post(createUserVerify, createUser)
-
-router
-  .route("/:id")
-  .get(cache(500), getUser)
-  .patch(updateUser)
-  .delete(deleteUser)
+router.route("/:id").get(getUser).patch(updateUser).delete(deleteUser)
 
 module.exports = router
