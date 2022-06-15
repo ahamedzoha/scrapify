@@ -40,7 +40,3 @@ jobs:
           deliverables: "./app.yaml"
           promote: true
           version: "github-ci"
-
-      # Example of using the output
-      - id: "test"
-        run: 'curl "${{ steps.deploy.outputs.url }}/api/v1/stocks"'
