@@ -1,14 +1,11 @@
 This is the Google Pub/Sub fake.
 Implementation may be incomplete or differ from the real system.
-Jun 08, 2022 4:43:13 PM com.google.cloud.pubsub.testing.v1.Main main
+Feb 06, 2023 4:26:07 PM com.google.cloud.pubsub.testing.v1.Main main
 INFO: IAM integration is disabled. IAM policy methods and ACL checks are not supported
-Jun 08, 2022 4:43:14 PM io.gapi.emulators.netty.NettyUtil applyJava7LongHostnameWorkaround
-INFO: Applied Java 7 long hostname workaround.
-Jun 08, 2022 4:43:14 PM com.google.cloud.pubsub.testing.v1.Main main
-INFO: Server started, listening on 8084
-Jun 08, 2022 4:43:14 PM io.gapi.emulators.grpc.GrpcServer$3 operationComplete
-INFO: Adding handler(s) to newly registered Channel.
-Jun 08, 2022 4:43:16 PM io.gapi.emulators.grpc.GrpcServer$3 operationComplete
-INFO: Adding handler(s) to newly registered Channel.
-Jun 08, 2022 4:43:16 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Feb 06, 2023 4:26:08 PM com.google.cloud.pubsub.testing.v1.Main main
+INFO: Server started, listening on 8085
+Feb 06, 2023 4:26:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
