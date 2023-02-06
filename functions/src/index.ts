@@ -10,9 +10,9 @@ const URL = `https://www.dsebd.org/`
 type StockData = {
   name: string
   prices: {
-    current?: string
-    changed: string
-    changePercent: string
+    current: string | null
+    changed: string | null
+    changePercent: string | null
   }
 }
 
@@ -20,7 +20,7 @@ type StockData = {
 // from 10 through 15 on every day-of-week from Sunday through Thursday.
 exports.getAllStockTickers = pubsub
   .schedule('*/2 10-15 * * 0-4')
-  .onRun(async (message) => {
+  .onRun(async () => {
     const stockData: StockData[] = []
     await axios
       .get(URL)
@@ -38,7 +38,8 @@ exports.getAllStockTickers = pubsub
               .replace(/\t/g, '')
               .split(' ')[0]
               .trim()
-              .match(/\d?[a-zA-Z]|\([^)]*\)/g) ?? [].join('')
+              .match(/\d?[a-zA-Z]|\([^)]*\)/g)
+              ?.join('') ?? [].join('')
 
           const priceData =
             $(this)
@@ -48,9 +49,9 @@ exports.getAllStockTickers = pubsub
           stockData.push({
             name: companyName.toString(),
             prices: {
-              current: priceData[0],
-              changed: priceData[1],
-              changePercent: `${priceData[2]}%`,
+              current: priceData[0] ? priceData[0] : null,
+              changed: priceData[1] ? priceData[1] : null,
+              changePercent: `${priceData[2] ? priceData[2] : null}%`,
             },
           })
         })
@@ -81,32 +82,31 @@ exports.getAllStockTickersNameHTTP = https.onRequest(async (req, res) => {
       const $ = load(html)
 
       $('.abhead', html).each(function () {
-        $(this).text()
-
         const companyName =
           $(this)
             .text()
             .replace(/\t/g, '')
             .split(' ')[0]
             .trim()
-            .match(/\d?[a-zA-Z]|\([^)]*\)/g) ?? [].join('')
+            .match(/\d?[a-zA-Z]|\([^)]*\)/g)
+            ?.join('') ?? [].join('')
 
         const priceData =
           $(this)
             .text()
-            .match(/[+/-]?[0-9]+\.[0-9]+/g) ?? ''
+            .match(/[+/-]?[0-9]+\.[0-9]+/g) ?? []
 
         stockData.push({
           name: companyName.toString(),
           prices: {
-            current: priceData[0],
-            changed: priceData[1],
-            changePercent: `${priceData[2]}%`,
+            current: priceData[0] ? priceData[0] : null,
+            changed: priceData[1] ? priceData[1] : null,
+            changePercent: `${priceData[2] ? priceData[2] : null}%`,
           },
         })
       })
       await admin.firestore().collection('stocks').add({
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        timestamp: Date.now(),
         data: stockData,
       })
 
@@ -114,7 +114,10 @@ exports.getAllStockTickersNameHTTP = https.onRequest(async (req, res) => {
         structuredData: true,
       })
       console.log(`Successfully scraped ${stockData.length} stocks`)
-      res.send(`Successfully scraped ${stockData.length} stocks`)
+      res.send({
+        message: `Successfully scraped ${stockData.length} stocks`,
+        data: stockData,
+      })
     })
     .catch((error) => {
       logger.error('Unsuccessful Run', { structuredData: true })
