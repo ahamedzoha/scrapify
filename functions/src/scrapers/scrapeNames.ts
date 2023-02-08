@@ -21,6 +21,7 @@ const html = `<table>
   </tr>
 </table>`
 
+// function
 const getCompanyNames = async () => {
   try {
     const response = await axios.get(URL)
