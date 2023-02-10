@@ -1,8 +1,9 @@
 import { pubsub, https, logger } from 'firebase-functions'
 import * as admin from 'firebase-admin'
 
-import getCompanyNames from './scrapers/scrapeNames'
+// import getCompanyNames from './scrapers/scrapeNames'
 import getLiveStockData from './scrapers/scrapeLiveStockData'
+import getAllSharePricebyValue from './scrapers/getLatestSharePrice_value'
 
 admin.initializeApp()
 
@@ -51,12 +52,22 @@ exports.getAllStockTickersNameHTTP = https.onRequest(async (req, res) => {
   }
 })
 
-exports.getAllStockNames = https.onRequest(async (req, res) => {
+// exports.getAllStockNames = https.onRequest(async (req, res) => {
+//   try {
+//     const companyNames = await getCompanyNames()
+//     console.log(companyNames)
+//     res.send(companyNames)
+//   } catch (error) {
+//     res.send(error)
+//   }
+// })
+
+exports.getAllSharePricebyValue = https.onRequest(async (req, res) => {
   try {
-    const companyNames = await getCompanyNames()
-    console.log(companyNames)
-    res.send(companyNames)
+    const sharePrice = await getAllSharePricebyValue()
+    console.log(sharePrice)
+    res.send(sharePrice)
   } catch (error) {
-    res.send(error)
+    res.status(400).send(error)
   }
 })

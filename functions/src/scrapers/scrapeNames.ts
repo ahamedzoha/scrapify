@@ -7,19 +7,19 @@ interface TableRow {
   [key: string]: string | null
 }
 
-const html = `<table>
-<tr>
-    <td align="left">Market</td>
-  </tr>
-  <tr>
-    <td align="left">Key 1</td>
-    <td align="center">Value 1</td>
-  </tr>
-  <tr>
-    <td align="left">Key 2</td>
-    <td align="center">Value 2</td>
-  </tr>
-</table>`
+// const html = `<table>
+// <tr>
+//     <td align="left">Market</td>
+//   </tr>
+//   <tr>
+//     <td align="left">Key 1</td>
+//     <td align="center">Value 1</td>
+//   </tr>
+//   <tr>
+//     <td align="left">Key 2</td>
+//     <td align="center">Value 2</td>
+//   </tr>
+// </table>`
 
 // function
 const getCompanyNames = async () => {
