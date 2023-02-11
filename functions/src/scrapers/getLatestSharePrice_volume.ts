@@ -1,8 +1,8 @@
 import marketHighlightsScraperFn from '../utils/marketHighlightsScraperFn'
 
-const URL = `https://dsebd.org/latest_share_price_scroll_by_value.php`
+const URL = `https://dsebd.org/latest_share_price_scroll_by_volume.php`
 
-const getAllSharePricebyValue = async () => {
+const getAllSharePricebyVolume = async () => {
   try {
     const response = await marketHighlightsScraperFn(URL)
     return response
@@ -11,4 +11,4 @@ const getAllSharePricebyValue = async () => {
   }
 }
 
-export default getAllSharePricebyValue
+export default getAllSharePricebyVolume
