@@ -16,7 +16,7 @@ type DataType = {
 }
 type Data = DataType[]
 
-type MarketHighlightsScraperFn = (URL: string) => Promise<Data | unknown>
+type MarketHighlightsScraperFn = (URL: string) => Promise<Data>
 
 const marketHighlightsScraperFn: MarketHighlightsScraperFn = async (
   URL: string
@@ -56,7 +56,7 @@ const marketHighlightsScraperFn: MarketHighlightsScraperFn = async (
     )
     return data
   } catch (err) {
-    return err
+    return []
   }
 }
 
