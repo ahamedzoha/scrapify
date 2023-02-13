@@ -46,10 +46,10 @@ exports.getAllStockTickersV2 = pubsub
       await admin
         .firestore()
         .collection('stocks-v2')
-        .add([
+        .add({
           ...stockData,
-          { timestamp: admin.firestore.FieldValue.serverTimestamp() },
-        ])
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        })
 
       logger.info('Ran Function Successfully', {
         structuredData: true,
@@ -78,7 +78,7 @@ exports.getAllStockTickersNameHTTP = https.onRequest(async (req, res) => {
       structuredData: true,
     })
     console.log(`Successfully scraped ${stockData.length} stocks`)
-    res.send([...stockData, { timestamp: Date.now() }])
+    res.send(Object.assign({}, stockData, { timestamp: Date.now() }))
   } catch (error) {
     logger.error('Unsuccessful Run', { structuredData: true })
     console.log(error)
