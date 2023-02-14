@@ -1,22 +1,8 @@
 import axios from 'axios'
 import { load } from 'cheerio'
+import { CompanyData } from '../types'
 
-type DataType = {
-  index: number
-  trading_code: string
-  ltp: string
-  high: string
-  low: string
-  closep: string
-  ycp: string
-  change: string
-  trade: string
-  value: string
-  volume: string
-}
-type Data = DataType[]
-
-type MarketHighlightsScraperFn = (URL: string) => Promise<Data>
+type MarketHighlightsScraperFn = (URL: string) => Promise<CompanyData>
 
 const marketHighlightsScraperFn: MarketHighlightsScraperFn = async (
   URL: string
@@ -24,7 +10,7 @@ const marketHighlightsScraperFn: MarketHighlightsScraperFn = async (
   try {
     const response = await axios.get(URL)
     const $ = load(response.data)
-    const data: Data = []
+    const data: CompanyData = []
     $('div.table-responsive.inner-scroll  > table:nth-child(1) > tbody').each(
       (i, el) => {
         const index = i + 1
@@ -40,17 +26,17 @@ const marketHighlightsScraperFn: MarketHighlightsScraperFn = async (
         const volume = $(el).find('td').eq(10).text().trim()
 
         data.push({
-          index,
-          trading_code,
-          ltp,
-          high,
-          low,
-          closep,
-          ycp,
-          change,
-          trade,
-          value,
-          volume,
+          index: index,
+          trading_code: trading_code,
+          ltp: parseFloat(ltp),
+          high: parseFloat(high),
+          low: parseFloat(low),
+          closep: parseFloat(closep),
+          ycp: parseFloat(ycp),
+          change: parseFloat(change),
+          trade: parseFloat(trade),
+          value: parseFloat(value),
+          volume: parseFloat(volume),
         })
       }
     )

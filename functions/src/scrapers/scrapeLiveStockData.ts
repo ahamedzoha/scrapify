@@ -1,35 +1,20 @@
-import axios from 'axios'
-import { load } from 'cheerio'
+import marketHighlightsScraperFn from '../utils/marketHighlightsScraperFn'
 import { StockData } from '../types'
-const URL = `https://www.dsebd.org/`
+const URL = `https://dsebd.org/latest_share_price_scroll_l.php`
 
 const getLiveStockData: () => Promise<StockData[]> = async () => {
   try {
-    const resp = await axios.get(URL)
-    const $ = load(resp.data)
+    const response = await marketHighlightsScraperFn(URL)
 
     const stockData: StockData[] = []
 
-    $('.abhead').each(function () {
-      const companyName =
-        $(this)
-          .text()
-          .trim()
-          .split(' ')[0]
-          .match(/[A-Za-z0-9]+/g)
-          ?.join('') || ''
-
-      const priceData =
-        $(this)
-          .text()
-          .match(/[+-]?[0-9]+\.[0-9]+/g) || []
-
+    response.forEach((stock) => {
       stockData.push({
-        name: companyName,
+        name: stock.trading_code,
         prices: {
-          current: priceData[0] ? priceData[0] : '',
-          changed: priceData[1],
-          changePercent: `${priceData[2]}%`,
+          current: stock.ltp,
+          changed: stock.change,
+          changePercent: findPercentageChange(stock.ltp, stock.change),
         },
       })
     })
@@ -39,6 +24,11 @@ const getLiveStockData: () => Promise<StockData[]> = async () => {
     console.log(error)
     return []
   }
+}
+
+const findPercentageChange = (current: number, changedBy: number) => {
+  // return upto 2 decimal places
+  return parseFloat(((changedBy / current) * 100).toFixed(2))
 }
 
 export default getLiveStockData
