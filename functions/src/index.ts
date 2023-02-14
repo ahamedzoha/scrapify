@@ -45,7 +45,7 @@ exports.getAllStockTickersV2 = pubsub
       const batch = firestore.batch()
 
       stockData.forEach(async (company) => {
-        const ref = firestore.collection('stocks-v2').doc(company.name)
+        const ref = firestore.collection('stocksV2').doc(company.name)
         const priceRef = ref.collection('prices').doc()
 
         batch.set(
