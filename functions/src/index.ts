@@ -37,35 +37,30 @@ exports.getAllStockTickers = pubsub
 // Scheduled function that runs every 2nd minute past every hour
 // from 10 through 15 on every day-of-week from Sunday through Thursday.
 exports.getAllStockTickersV2 = pubsub
-  .schedule('*/2 10-15 * * 0-4')
+  .schedule('*/10 10-15 * * 0-4')
   .onRun(async () => {
     try {
       const stockData = await getLiveStockData()
-      const chunkSize = 200
 
-      for (let i = 0; i < stockData.length; i += chunkSize) {
-        const chunk = stockData.slice(i, i + chunkSize)
-        const batch = firestore.batch()
+      const batch = firestore.batch()
 
-        chunk.forEach((company) => {
-          const ref = firestore.collection('stocksV2').doc(company.name)
-          const priceRef = ref.collection('prices').doc()
+      stockData.forEach(async (company) => {
+        const ref = firestore.collection('stocks-v2').doc(company.name)
+        const priceRef = ref.collection('prices').doc()
 
-          batch.set(ref, { name: company.name }, { merge: true })
-          batch.set(
-            priceRef,
-            {
-              current: company.prices.current,
-              changed: company.prices.changed,
-              changePercent: company.prices.changePercent,
-              timestamp: Timestamp.fromDate(new Date()),
-            },
-            { merge: true }
-          )
-        })
+        batch.set(
+          priceRef,
+          {
+            current: company.prices.current,
+            changed: company.prices.changed,
+            changePercent: company.prices.changePercent,
+            timestamp: Timestamp.fromDate(new Date()),
+          },
+          { merge: true }
+        )
+      })
 
-        await batch.commit()
-      }
+      await batch.commit()
 
       logger.info('Ran Function Successfully', {
         structuredData: true,
@@ -88,31 +83,26 @@ if (
   exports.getAllStockTickersNameHTTP = https.onRequest(async (req, res) => {
     try {
       const stockData = await getLiveStockData()
-      const chunkSize = 200
 
-      for (let i = 0; i < stockData.length; i += chunkSize) {
-        const chunk = stockData.slice(i, i + chunkSize)
-        const batch = firestore.batch()
+      const batch = firestore.batch()
 
-        chunk.forEach((company) => {
-          const ref = firestore.collection('stocks-v2').doc(company.name)
-          const priceRef = ref.collection('prices').doc()
+      stockData.forEach(async (company) => {
+        const ref = firestore.collection('stocks-v2').doc(company.name)
+        const priceRef = ref.collection('prices').doc()
 
-          batch.set(ref, { name: company.name }, { merge: true })
-          batch.set(
-            priceRef,
-            {
-              current: company.prices.current,
-              changed: company.prices.changed,
-              changePercent: company.prices.changePercent,
-              timestamp: Timestamp.fromDate(new Date()),
-            },
-            { merge: true }
-          )
-        })
+        batch.set(
+          priceRef,
+          {
+            current: company.prices.current,
+            changed: company.prices.changed,
+            changePercent: company.prices.changePercent,
+            timestamp: Timestamp.fromDate(new Date()),
+          },
+          { merge: true }
+        )
+      })
 
-        await batch.commit()
-      }
+      await batch.commit()
 
       logger.info('Ran Function Successfully', { structuredData: true })
       console.log(`Successfully scraped ${stockData.length} stocks`)
