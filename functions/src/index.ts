@@ -41,28 +41,31 @@ exports.getAllStockTickersV2 = pubsub
   .onRun(async () => {
     try {
       const stockData = await getLiveStockData()
+      const chunkSize = 200
 
-      const batch = firestore.batch()
+      for (let i = 0; i < stockData.length; i += chunkSize) {
+        const chunk = stockData.slice(i, i + chunkSize)
+        const batch = firestore.batch()
 
-      stockData.forEach(async (company) => {
-        const ref = firestore.collection('stocksV2').doc(company.name)
+        chunk.forEach((company) => {
+          const ref = firestore.collection('stocksV2').doc(company.name)
+          const priceRef = ref.collection('prices').doc()
 
-        batch.set(
-          ref,
-          {
-            name: company.name,
-            prices: FieldValue.arrayUnion({
+          batch.set(ref, { name: company.name }, { merge: true })
+          batch.set(
+            priceRef,
+            {
               current: company.prices.current,
               changed: company.prices.changed,
               changePercent: company.prices.changePercent,
               timestamp: Timestamp.fromDate(new Date()),
-            }),
-          },
-          { merge: true }
-        )
-      })
+            },
+            { merge: true }
+          )
+        })
 
-      await batch.commit()
+        await batch.commit()
+      }
 
       logger.info('Ran Function Successfully', {
         structuredData: true,
@@ -85,37 +88,38 @@ if (
   exports.getAllStockTickersNameHTTP = https.onRequest(async (req, res) => {
     try {
       const stockData = await getLiveStockData()
+      const chunkSize = 200
 
-      const batch = firestore.batch()
+      for (let i = 0; i < stockData.length; i += chunkSize) {
+        const chunk = stockData.slice(i, i + chunkSize)
+        const batch = firestore.batch()
 
-      stockData.forEach(async (company) => {
-        const ref = firestore.collection('stocks-v2').doc(company.name)
+        chunk.forEach((company) => {
+          const ref = firestore.collection('stocks-v2').doc(company.name)
+          const priceRef = ref.collection('prices').doc()
 
-        batch.set(
-          ref,
-          {
-            name: company.name,
-            prices: FieldValue.arrayUnion({
+          batch.set(ref, { name: company.name }, { merge: true })
+          batch.set(
+            priceRef,
+            {
               current: company.prices.current,
               changed: company.prices.changed,
               changePercent: company.prices.changePercent,
               timestamp: Timestamp.fromDate(new Date()),
-            }),
-          },
-          { merge: true }
-        )
-      })
+            },
+            { merge: true }
+          )
+        })
 
-      await batch.commit()
+        await batch.commit()
+      }
 
-      logger.info('Ran Function Successfully', {
-        structuredData: true,
-      })
+      logger.info('Ran Function Successfully', { structuredData: true })
       console.log(`Successfully scraped ${stockData.length} stocks`)
       res.send(Object.assign({}, stockData, { timestamp: Date.now() }))
     } catch (error) {
       logger.error('Unsuccessful Run', { structuredData: true })
-      console.log(error)
+      console.error(error)
       res.send(error)
     }
   })
