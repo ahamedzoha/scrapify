@@ -15,6 +15,13 @@ const getLiveStockData: () => Promise<StockData[]> = async () => {
           current: stock.ltp,
           changed: stock.change,
           changePercent: findPercentageChange(stock.ltp, stock.change),
+          high: stock.high,
+          low: stock.low,
+          closep: stock.closep,
+          ycp: stock.ycp,
+          trade: stock.trade,
+          value: stock.value,
+          volume: stock.volume,
         },
       })
     })
