@@ -81,63 +81,63 @@ exports.getAllStockTickersV2 = pubsub
   })
 
 // Scheduled function that runs every friday at 10:00 AM to get the full name of the company for each stock trading code
-exports.addCompanyFullNameToDocument = pubsub
-  .schedule('0 10 * * 6')
-  .onRun(async () => {
-    try {
-      const companyData = await companyFullNameScraper(
-        'https://dsebd.org/latest_share_price_scroll_l.php'
-      )
+// exports.addCompanyFullNameToDocument = pubsub
+//   .schedule('0 10 * * 6')
+//   .onRun(async () => {
+//     try {
+//       const companyData = await companyFullNameScraper(
+//         'https://dsebd.org/latest_share_price_scroll_l.php'
+//       )
 
-      const batch = firestore.batch()
+//       const batch = firestore.batch()
 
-      companyData.forEach(async (company) => {
-        const ref = firestore.collection('stocksV2').doc(company.trading_code)
+//       companyData.forEach(async (company) => {
+//         const ref = firestore.collection('stocksV2').doc(company.trading_code)
 
-        batch.set(ref, { fullName: company.name }, { merge: true })
-      })
+//         batch.set(ref, { fullName: company.name }, { merge: true })
+//       })
 
-      await batch.commit()
+//       await batch.commit()
 
-      logger.info('Ran Function Successfully', {
-        structuredData: true,
-      })
-      logger.info(`Added company full names ${companyData.length} stocks`)
-    } catch (error) {
-      console.error(error)
-      logger.error('Error scraping stock data', { error })
-    }
-  })
+//       logger.info('Ran Function Successfully', {
+//         structuredData: true,
+//       })
+//       logger.info(`Added company full names ${companyData.length} stocks`)
+//     } catch (error) {
+//       console.error(error)
+//       logger.error('Error scraping stock data', { error })
+//     }
+//   })
 
 // HTTP function to manually get the full name of the company for each stock trading code
-exports.HTTPaddCompanyFullNameToDocument = https.onRequest(async (req, res) => {
-  try {
-    const companyData = await companyFullNameScraper(
-      'https://dsebd.org/latest_share_price_scroll_l.php'
-    )
+// exports.HTTPaddCompanyFullNameToDocument = https.onRequest(async (req, res) => {
+//   try {
+//     const companyData = await companyFullNameScraper(
+//       'https://dsebd.org/latest_share_price_scroll_l.php'
+//     )
 
-    const batch = firestore.batch()
+//     const batch = firestore.batch()
 
-    companyData.forEach(async (company) => {
-      const ref = firestore.collection('stocksV2').doc(company.trading_code)
+//     companyData.forEach(async (company) => {
+//       const ref = firestore.collection('stocksV2').doc(company.trading_code)
 
-      batch.set(ref, { fullName: company.name }, { merge: true })
-    })
+//       batch.set(ref, { fullName: company.name }, { merge: true })
+//     })
 
-    await batch.commit()
+//     await batch.commit()
 
-    logger.info('Ran Function Successfully', {
-      structuredData: true,
-    })
+//     logger.info('Ran Function Successfully', {
+//       structuredData: true,
+//     })
 
-    logger.info(`Added company full names ${companyData.length} stocks`)
-    res.send(companyData)
-  } catch (error) {
-    res.send(error)
-    console.error(error)
-    logger.error('Error scraping stock data', { error })
-  }
-})
+//     logger.info(`Added company full names ${companyData.length} stocks`)
+//     res.send(companyData)
+//   } catch (error) {
+//     res.send(error)
+//     console.error(error)
+//     logger.error('Error scraping stock data', { error })
+//   }
+// })
 
 // run the following functions if on local firebase emulator
 // do not deploy these functions to production
