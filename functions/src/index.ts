@@ -6,6 +6,7 @@ import getLiveStockData from './scrapers/scrapeLiveStockData'
 import getAllSharePricebyValue from './scrapers/getLatestSharePrice_value'
 import getAllSharePricebyTrade from './scrapers/getLatestSharePrice_trade'
 import getAllSharePricebyVolume from './scrapers/getLatestSharePrice_volume'
+import companyFullNameScraper from './utils/companyFullNameScraperFn'
 
 initializeApp()
 const firestore = getFirestore()
@@ -79,9 +80,67 @@ exports.getAllStockTickersV2 = pubsub
     }
   })
 
+// Scheduled function that runs every friday at 10:00 AM to get the full name of the company for each stock trading code
+exports.addCompanyFullNameToDocument = pubsub
+  .schedule('0 10 * * 6')
+  .onRun(async () => {
+    try {
+      const companyData = await companyFullNameScraper(
+        'https://dsebd.org/latest_share_price_scroll_l.php'
+      )
+
+      const batch = firestore.batch()
+
+      companyData.forEach(async (company) => {
+        const ref = firestore.collection('stocksV2').doc(company.trading_code)
+
+        batch.set(ref, { fullName: company.name }, { merge: true })
+      })
+
+      await batch.commit()
+
+      logger.info('Ran Function Successfully', {
+        structuredData: true,
+      })
+      logger.info(`Added company full names ${companyData.length} stocks`)
+    } catch (error) {
+      console.error(error)
+      logger.error('Error scraping stock data', { error })
+    }
+  })
+
+// HTTP function to manually get the full name of the company for each stock trading code
+exports.HTTPaddCompanyFullNameToDocument = https.onRequest(async (req, res) => {
+  try {
+    const companyData = await companyFullNameScraper(
+      'https://dsebd.org/latest_share_price_scroll_l.php'
+    )
+
+    const batch = firestore.batch()
+
+    companyData.forEach(async (company) => {
+      const ref = firestore.collection('stocksV2').doc(company.trading_code)
+
+      batch.set(ref, { fullName: company.name }, { merge: true })
+    })
+
+    await batch.commit()
+
+    logger.info('Ran Function Successfully', {
+      structuredData: true,
+    })
+
+    logger.info(`Added company full names ${companyData.length} stocks`)
+    res.send(companyData)
+  } catch (error) {
+    res.send(error)
+    console.error(error)
+    logger.error('Error scraping stock data', { error })
+  }
+})
+
 // run the following functions if on local firebase emulator
 // do not deploy these functions to production
-
 if (
   process.env.FUNCTIONS_EMULATOR === 'true' ||
   process.env.FUNCTIONS_EMULATOR === '1'
@@ -124,6 +183,52 @@ if (
     } catch (error) {
       logger.error('Unsuccessful Run', { structuredData: true })
       console.error(error)
+      res.send(error)
+    }
+  })
+
+  exports.addStockTradeCodeToDocument = https.onRequest(async (req, res) => {
+    try {
+      const stockData = await getLiveStockData()
+
+      const batch = firestore.batch()
+
+      stockData.forEach(async (company) => {
+        const ref = firestore.collection('stocks-v2').doc(company.name)
+
+        batch.set(ref, { name: company.name }, { merge: true })
+      })
+
+      await batch.commit()
+
+      logger.info('Ran Function Successfully', { structuredData: true })
+      console.log(`Successfully scraped ${stockData.length} stocks`)
+      res.send(Object.assign({}, stockData, { timestamp: Date.now() }))
+    } catch (error) {
+      logger.error('Unsuccessful Run', { structuredData: true })
+      console.error(error)
+      res.send(error)
+    }
+  })
+
+  exports.addCompanyFullNameToDocument = https.onRequest(async (req, res) => {
+    try {
+      const companyData = await companyFullNameScraper(
+        'https://dsebd.org/latest_share_price_scroll_l.php'
+      )
+
+      const batch = firestore.batch()
+
+      companyData.forEach(async (company) => {
+        const ref = firestore.collection('stocks-v2').doc(company.trading_code)
+
+        batch.set(ref, { fullName: company.name }, { merge: true })
+      })
+
+      await batch.commit()
+
+      res.send(companyData)
+    } catch (error) {
       res.send(error)
     }
   })
