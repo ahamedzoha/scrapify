@@ -15,7 +15,7 @@ const firestore = getFirestore()
 // Scheduled function that runs every 2nd minute past every hour
 // from 10 through 15 on every day-of-week from Sunday through Thursday.
 exports.getAllStockTickers = pubsub
-  .schedule('*/2 10-15 * * 0-4')
+  .schedule('*/2 10-14 * * 0-4')
   .onRun(async () => {
     try {
       const stockData = await getLiveStockData()
@@ -39,7 +39,7 @@ exports.getAllStockTickers = pubsub
 // Scheduled function that runs every 2nd minute past every hour
 // from 10 through 15 on every day-of-week from Sunday through Thursday.
 exports.getAllStockTickersV2 = pubsub
-  .schedule('*/10 10-15 * * 0-4')
+  .schedule('*/10 10-14 * * 0-4')
   .onRun(async () => {
     try {
       const stockData = await getLiveStockData()
@@ -81,8 +81,10 @@ exports.getAllStockTickersV2 = pubsub
     }
   })
 
+// Scheduled function that runs every 2nd minute past every hour
+// from 10 through 15 on every day-of-week from Sunday through Thursday.
 exports.getAllMarketInfo = pubsub
-  .schedule('*/10 10-15 * * 0-4')
+  .schedule('*/5 10-14 * * 0-4')
   .onRun(async () => {
     try {
       const marketInfo = await getMarketInfo()
@@ -91,7 +93,7 @@ exports.getAllMarketInfo = pubsub
 
       marketInfo.forEach(async (market) => {
         const ref = firestore.collection('market-indexes').doc(market.indexName)
-        const marketRef = ref.collection('marketData').doc()
+        const marketRef = ref.collection('index-data').doc()
 
         batch.set(
           marketRef,
@@ -230,7 +232,7 @@ if (
 
       marketInfo.forEach(async (market) => {
         const ref = firestore.collection('market-indexes').doc(market.indexName)
-        const marketRef = ref.collection('marketData').doc()
+        const marketRef = ref.collection('index-data').doc()
 
         batch.set(
           marketRef,
