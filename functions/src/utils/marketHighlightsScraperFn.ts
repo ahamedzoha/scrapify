@@ -25,19 +25,45 @@ const marketHighlightsScraperFn: MarketHighlightsScraperFn = async (
         const value = $(el).find('td').eq(9).text().trim()
         const volume = $(el).find('td').eq(10).text().trim()
 
-        data.push({
-          index: index,
-          trading_code: trading_code,
-          ltp: parseFloat(ltp),
-          high: parseFloat(high),
-          low: parseFloat(low),
-          closep: parseFloat(closep),
-          ycp: parseFloat(ycp),
-          change: parseFloat(change),
-          trade: parseFloat(trade),
-          value: parseFloat(value),
-          volume: parseFloat(volume),
-        })
+        // console.log(trading_code)
+        // console.log(ltp)
+        // console.log(high)
+        // console.log(low)
+        // console.log(closep)
+        // console.log(ycp)
+        // console.log(change)
+        // console.log(trade)
+        // console.log(value)
+        // console.log(volume)
+
+        if (
+          trading_code.length === 0 ||
+          ltp.length === 0 ||
+          high.length === 0 ||
+          low.length === 0 ||
+          closep.length === 0 ||
+          ycp.length === 0 ||
+          change.length === 0 ||
+          trade.length === 0 ||
+          value.length === 0 ||
+          volume.length === 0
+        ) {
+          return
+        } else {
+          data.push({
+            index: index,
+            trading_code: trading_code,
+            ltp: parseFloat(ltp),
+            high: parseFloat(high),
+            low: parseFloat(low),
+            closep: parseFloat(closep),
+            ycp: parseFloat(ycp),
+            change: parseFloat(change),
+            trade: parseFloat(trade),
+            value: parseFloat(value),
+            volume: parseFloat(volume),
+          })
+        }
       }
     )
     return data

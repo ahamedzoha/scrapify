@@ -6,6 +6,9 @@ const getLiveStockData: () => Promise<StockData[]> = async () => {
   try {
     const response = await marketHighlightsScraperFn(URL)
 
+    if (response.length <= 1) {
+      throw new Error('Stock Data is not available')
+    }
     const stockData: StockData[] = []
 
     response.forEach((stock) => {

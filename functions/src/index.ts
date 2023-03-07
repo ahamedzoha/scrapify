@@ -81,6 +81,40 @@ exports.getAllStockTickersV2 = pubsub
     }
   })
 
+exports.getAllMarketInfo = pubsub
+  .schedule('*/10 10-15 * * 0-4')
+  .onRun(async () => {
+    try {
+      const marketInfo = await getMarketInfo()
+
+      const batch = firestore.batch()
+
+      marketInfo.forEach(async (market) => {
+        const ref = firestore.collection('market-indexes').doc(market.indexName)
+        const marketRef = ref.collection('marketData').doc()
+
+        batch.set(
+          marketRef,
+          {
+            indexName: market.indexName,
+            indexValue: market.indexValue,
+            indexChange: market.indexChange,
+            indexChangePercent: market.indexChangePercent,
+            timestamp: Timestamp.fromDate(new Date()),
+          },
+          { merge: true }
+        )
+      })
+
+      await batch.commit()
+      logger.info('Ran Function Successfully', { structuredData: true })
+      console.log(`Successfully scraped ${marketInfo.length} market info`)
+    } catch (error) {
+      console.error(error)
+      logger.error('Error scraping MarketInfo data', { error })
+    }
+  })
+
 // Scheduled function that runs every friday at 10:00 AM to get the full name of the company for each stock trading code
 // exports.addCompanyFullNameToDocument = pubsub
 //   .schedule('0 10 * * 6')
@@ -191,7 +225,30 @@ if (
   exports.getCurrentMarketInfoHTTP = https.onRequest(async (req, res) => {
     try {
       const marketInfo = await getMarketInfo()
-      console.log(marketInfo)
+
+      const batch = firestore.batch()
+
+      marketInfo.forEach(async (market) => {
+        const ref = firestore.collection('market-indexes').doc(market.indexName)
+        const marketRef = ref.collection('marketData').doc()
+
+        batch.set(
+          marketRef,
+          {
+            indexName: market.indexName,
+            indexValue: market.indexValue,
+            indexChange: market.indexChange,
+            indexChangePercent: market.indexChangePercent,
+            timestamp: Timestamp.fromDate(new Date()),
+          },
+          { merge: true }
+        )
+      })
+
+      await batch.commit()
+      logger.info('Ran Function Successfully', { structuredData: true })
+      console.log(`Successfully scraped ${marketInfo.length} market info`)
+
       res.send(marketInfo)
     } catch (error) {
       console.log(error)
