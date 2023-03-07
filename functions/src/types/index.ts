@@ -29,3 +29,12 @@ export type CompanyDataType = {
 }
 
 export type CompanyData = CompanyDataType[]
+
+export type MarketIndexDataType = {
+  indexName: string
+  indexValue: number
+  indexChange: number
+  indexChangePercent: number
+}
+
+export type MarketIndexData = MarketIndexDataType[]

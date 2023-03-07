@@ -7,6 +7,7 @@ import getAllSharePricebyValue from './scrapers/getLatestSharePrice_value'
 import getAllSharePricebyTrade from './scrapers/getLatestSharePrice_trade'
 import getAllSharePricebyVolume from './scrapers/getLatestSharePrice_volume'
 import companyFullNameScraper from './utils/companyFullNameScraperFn'
+import getMarketInfo from './scrapers/getMarketInfo'
 
 initializeApp()
 const firestore = getFirestore()
@@ -184,6 +185,16 @@ if (
       logger.error('Unsuccessful Run', { structuredData: true })
       console.error(error)
       res.send(error)
+    }
+  })
+
+  exports.getCurrentMarketInfoHTTP = https.onRequest(async (req, res) => {
+    try {
+      const marketInfo = await getMarketInfo()
+      console.log(marketInfo)
+      res.send(marketInfo)
+    } catch (error) {
+      console.log(error)
     }
   })
 
