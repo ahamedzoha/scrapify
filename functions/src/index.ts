@@ -156,7 +156,7 @@ exports.getAllMarketInfo = pubsub
 //     const batch = firestore.batch()
 
 //     companyData.forEach(async (company) => {
-//       const ref = firestore.collection('stocksV2').doc(company.trading_code)
+//       const ref = firestore.collection('stocks-v2').doc(company.trading_code)
 
 //       batch.set(ref, { fullName: company.name }, { merge: true })
 //     })
